@@ -20,4 +20,12 @@ describe Oystercard do
       expect { subject.top_up(91) }.to raise_error message
     end
   end
+
+  describe '#deduct' do
+    it 'is expected to deduct amount from the balance' do
+      subject.top_up(50)
+      expect { subject.deduct(20) }.to change{ subject.balance }.by(-20)
+    #if deduct(amount) from card then balance reduced by that amount
+    end
+  end
 end

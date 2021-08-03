@@ -13,6 +13,10 @@ class Oystercard
     (maximum_balance(amount)) ? (@balance = @balance + amount) : (raise message)
   end
 
+  def deduct(deduction)
+    @balance = @balance - deduction
+  end
+    
   private
 
   def maximum_balance(amount)
