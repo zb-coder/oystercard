@@ -24,8 +24,11 @@ describe Oystercard do
   describe '#deduct' do
     it 'is expected to deduct amount from the balance' do
       subject.top_up(50)
-      expect { subject.deduct(20) }.to change{ subject.balance }.by(-20)
-    #if deduct(amount) from card then balance reduced by that amount
+      # expect { subject.deduct(20) }.to change{ subject.balance }.by(-20)
+      # Allows you to access a private method
+      result = subject.send(:deduct, 20)
+      expect(result).to eq(30)
+      #if deduct(amount) from card then balance reduced by that amount
     end
   end
     
@@ -52,6 +55,15 @@ describe Oystercard do
     it 'is expected to return false when you touch out' do
       expect(subject.touch_out).to eq(false)
     end
+
+    it 'is expected to deduct balance when it becomes false' do
+      expect{ subject.touch_out }.to change{ subject.balance }.by(-5)
+    end
+
+
+    #touch_out
+    #deduct balance when it becomes false
+    #balance deducted by amount
   end
 
   describe '#in_journey?' do
