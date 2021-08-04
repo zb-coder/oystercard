@@ -11,12 +11,13 @@ class Oystercard
   end
 
   def top_up(amount)
-    message = "You've exceeded the Maximum amount of #{MAXIMUM_BALANCE}"
-    (maximum_balance(amount)) ? (@balance = @balance + amount) : (raise message)
+    raise "You've exceeded the Maximum amount of #{MAXIMUM_BALANCE}" unless maximum_balance(amount)
+
+    @balance += amount
   end
 
-  def deduct(deduction)
-    @balance = @balance - deduction
+  def deduct(amount)
+    @balance -= amount
   end
 
   def in_journey?
@@ -24,8 +25,9 @@ class Oystercard
   end
 
   def touch_in
-    message = "You do not have enough funds, you need atleast #{MINIMUM_BALANCE}"
-    (minimum_balance) ? (@status = true) : (raise message)
+    raise "You do not have enough funds, you need atleast #{MINIMUM_BALANCE}" unless minimum_balance
+
+    @status = true
   end
   
   def touch_out
