@@ -7,6 +7,17 @@ describe Oystercard do
     expect(subject.balance).to eq(DEFAULT_BALANCE)
   end
 
+  #instant variable - List of journey's 
+  #attr_reader
+    #What it should do?
+    #What is should return?
+
+  describe '#initialize' do 
+    it 'should return an empty journeys array' do
+      expect(subject.list_of_journeys).to be_empty
+    end 
+  end
+
   describe '#top_up' do
     #expect(card.top_up) to increase()
     it { is_expected.to respond_to(:top_up).with(1).argument }
@@ -65,13 +76,18 @@ describe Oystercard do
 
   describe '#touch_out' do
     it 'is expected to return false when you touch out' do
-      expect(subject.touch_out).to be_nil
+      expect(subject.touch_out(station)).to be_nil
     end
 
     it 'is expected to deduct balance when it becomes false' do
-      expect{ subject.touch_out }.to change{ subject.balance }.by(-5)
+      expect{ subject.touch_out(station) }.to change{ subject.balance }.by(-5)
     end
 
+    it 'is expected to remember the station' do
+      subject.top_up(1)
+      subject.touch_out(station)
+      expect(subject.exit_station).to eq(station)
+    end
 
     #touch_out
     #deduct balance when it becomes false
