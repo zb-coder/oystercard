@@ -1,6 +1,7 @@
 require 'oystercard'
 
 describe Oystercard do
+  
   let(:station) {double :station}
 
   it 'should have a new balance' do
@@ -93,6 +94,27 @@ describe Oystercard do
     #deduct balance when it becomes false
     #balance deducted by amount
   end
+
+  describe "#log_journey" do
+
+    before do
+      subject.top_up(1)
+      subject.touch_in(station)
+      subject.touch_out(station)
+    end
+    it "should store journey information" do
+      expect(subject.current_journey.length).to eq(2)
+    end
+
+    it "should store correct entry station" do
+      expect(subject.current_journey[:entry_station]).to eq(station)
+    end
+
+    it "should store correct exit station" do
+      expect(subject.current_journey[:exit_station]).to eq(station)
+    end
+
+  end 
 
   describe '#in_journey?' do
     it 'is expected to return false by default' do
