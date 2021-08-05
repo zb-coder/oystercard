@@ -1,6 +1,8 @@
 require 'oystercard'
 
 describe Oystercard do
+  let(:station) {double :station}
+
   it 'should have a new balance' do
     expect(subject.balance).to eq(DEFAULT_BALANCE)
   end
@@ -39,7 +41,7 @@ describe Oystercard do
     # return error message when false
     it 'is expected to have a minimum balance of £1' do
       message = "You do not have enough funds, you need atleast #{MINIMUM_BALANCE}"
-      expect { subject.touch_in }.to raise_error message
+      expect { subject.touch_in(station) }.to raise_error message
     end
 
     #touch_in
@@ -47,13 +49,23 @@ describe Oystercard do
     #return true
     it 'is expected to return true when touched_in' do
       subject.top_up(10)
-      expect(subject.touch_in).to eq(true)
+      subject.touch_in(station)
+      expect(subject).to be_in_journey
+    end
+
+    it 'is expected to remember the station' do
+      subject.top_up(1)
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq(station)
     end
   end
 
+  # Trying to test if the card will remember the station after touch_in
+    
+
   describe '#touch_out' do
     it 'is expected to return false when you touch out' do
-      expect(subject.touch_out).to eq(false)
+      expect(subject.touch_out).to be_nil
     end
 
     it 'is expected to deduct balance when it becomes false' do
@@ -73,7 +85,7 @@ describe Oystercard do
 
     it 'is expected to return true when status is true' do
       subject.top_up(10)
-      subject.touch_in
+      subject.touch_in(station)
       expect(subject.in_journey?).to eq(true)
     end
 
